@@ -8,7 +8,7 @@ class SlackBot
   def initialize(params)
     @user_id = params["user_id"]
     @text = params["text"] || ""
-    @trigger_word = params["trigger_word"] || "fifa"
+    @trigger_word = params["trigger_word"] || "frog"
     @slack_token = params["token"]
 
     Team.create_or_update(name: 'test', attack: 20, midfield: 29, defense: 20)
@@ -157,7 +157,7 @@ class SlackBot
 
     return answer
   end
-
+  5947bd34-5c69-471e-91d4-f8db32673019
   def hear_challenge(player, time = "")
     other_user_id = extract_user_id(player)
     challenge_created = false
