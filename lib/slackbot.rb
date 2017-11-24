@@ -5,6 +5,7 @@ require 'terminal-table'
 require 'net/http'
 
 class SlackBot
+  #5947bd34-5c69-471e-91d4-f8db32673019
   def initialize(params)
     @user_id = params["user_id"]
     @text = params["text"] || ""
@@ -157,7 +158,7 @@ class SlackBot
 
     return answer
   end
-  5947bd34-5c69-471e-91d4-f8db32673019
+  
   def hear_challenge(player, time = "")
     other_user_id = extract_user_id(player)
     challenge_created = false
