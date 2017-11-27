@@ -22,6 +22,6 @@ class PairPlayer < Player
     member = members.detect{ |m| m["id"] == username2 }
     name2 = member.present? ? member["name"] : "unknown"
 
-    "#{name1} et #{name2}"
+    "#{name1} & #{name2}"
   end
 end
