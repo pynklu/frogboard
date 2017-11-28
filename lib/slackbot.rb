@@ -121,9 +121,9 @@ class SlackBot
     r_for_scope(PairPlayer.all, n_weeks)
   end
 
-  def hear_2v2(player11, player12, score1, player21, player22, score2)
-    _player1 = PairPlayer.find_or_create_by_users(extract_user_id(player11), extract_user_id(player12))
-    _player2 = PairPlayer.find_or_create_by_users(extract_user_id(player21), extract_user_id(player22))
+  def hear_2v2(aanvaller1, verdediger1, score1, aanvaller2, verdediger2, score2)
+    _player1 = PairPlayer.find_or_create_by_users(extract_user_id(aanvaller1), extract_user_id(verdediger1))
+    _player2 = PairPlayer.find_or_create_by_users(extract_user_id(aanvaller2), extract_user_id(verdediger2))
 
     _team1, _team2 = Team.find_by_name('test'), Team.find_by_name('test')
 
@@ -132,7 +132,7 @@ class SlackBot
 
     create_game_with_players(_player1, _player2, _team1, _team2, score1, score2)
 
-    "Match (#{player11}, #{player12}, #{score1}) - (#{player21}, #{player22}, #{score2}) Toegevoegd"
+    "Match (#{aanvaller1}, #{verdediger1}, #{score1}) - (#{aanvaller2}, #{verdediger2}, #{score2}) Toegevoegd"
   end
 
   def hear_1v1(player1, score1, player2, score2)
