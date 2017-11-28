@@ -107,8 +107,8 @@ class Player < ActiveRecord::Base
     elos.where("created_at <= ?", date).last.rating rescue Elo::INITIAL_RATING
   end
 
-  def compute_new_rating(result, opponent_rating)
-    new_rating = rating + (k_factor.to_f * (result.to_f - Elo.expected(rating, opponent_rating))).to_i
+  def compute_new_rating(result, opponent_rating, diff)
+    new_rating = rating + (Math.log(1+diff)* k_factor.to_f * (result.to_f - Elo.expected(rating, opponent_rating))).to_i
     Elo.create(player: self, rating: new_rating)
   end
 

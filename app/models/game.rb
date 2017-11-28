@@ -51,8 +51,8 @@ class Game < ActiveRecord::Base
 
     # As player1's rating will be updated first, use cached ratings instead of
     # player1.rating directly
-    player1.compute_new_rating(result_player1, rating_player2)
-    player2.compute_new_rating(result_player2, rating_player1)
+    player1.compute_new_rating(result_player1, rating_player2, goal_difference)
+    player2.compute_new_rating(result_player2, rating_player1, goal_difference)
   end
 
   def team_difference
