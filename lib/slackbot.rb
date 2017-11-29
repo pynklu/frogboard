@@ -16,6 +16,7 @@ class SlackBot
   end
 
   def answer
+    return params if @slack_token != ENV["SLACK_WEBHOOK_TOKEN"]
     return "Bien tenté Jean-Mi" if @slack_token != ENV["SLACK_WEBHOOK_TOKEN"]
 
     data = @text.split
