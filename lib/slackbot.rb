@@ -86,7 +86,7 @@ class SlackBot
     "```#{table}```"
   end
 
-  def test_ranking_for_scope(scope, n_weeks)
+  def filtered_ranking_for_scope(scope, games_played, n_weeks)
     n_weeks = n_weeks.to_i
     from = Date.today.beginning_of_week - (n_weeks - 1).week if n_weeks > 0
 
@@ -99,7 +99,7 @@ class SlackBot
     rows = []
 
     ranking.each_with_index do |pr, index|
-      if pr[:player].games_played(from) > 3
+      if pr[:player].games_played(from) > games_played
         name = pr[:player].member_name(members)
 
         rows << ["#{index+1}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
@@ -139,17 +139,17 @@ class SlackBot
     ranking_for_scope(PairPlayer.all, n_weeks)
   end
 
-  def hear_test_ranking(n_weeks = 0)
-    test_ranking_for_scope(PairPlayer.all, n_weeks)
+  def hear_filtered_ranking(games_played = 3, n_weeks = 0)
+    filtered_ranking_for_scope(PairPlayer.all, games_played, n_weeks)
   end
 
-  def hear_solo_r(n_weeks = 0)
-    r_for_scope(Player.player, n_weeks)
-  end
+  # def hear_solo_r(n_weeks = 0)
+  #   r_for_scope(Player.player, n_weeks)
+  # end
 
-  def hear_team_r2(n_weeks = 0)
-    r_for_scope(PairPlayer.all, n_weeks)
-  end
+  # def hear_team_r2(n_weeks = 0)
+  #   r_for_scope(PairPlayer.all, n_weeks)
+  # end
 
   def hear_2v2(aanvaller1, verdediger1, score1, aanvaller2, verdediger2, score2)
     _player1 = PairPlayer.find_or_create_by_users(extract_user_id(aanvaller1), extract_user_id(verdediger1))
@@ -189,48 +189,48 @@ class SlackBot
     return answer
   end
   
-  def hear_challenge(player, time = "")
-    other_user_id = extract_user_id(player)
-    challenge_created = false
+  # def hear_challenge(player, time = "")
+  #   other_user_id = extract_user_id(player)
+  #   challenge_created = false
 
-    if time.length > 0
-      date = DateTime.parse(time) rescue nil
-      return "Moi personnellement, j'ai pas compris l'heure moi tout seul" if date.nil?
+  #   if time.length > 0
+  #     date = DateTime.parse(time) rescue nil
+  #     return "Moi personnellement, j'ai pas compris l'heure moi tout seul" if date.nil?
 
-      now = DateTime.now
-      if (date.hour > now.hour) || (date.hour == now.hour && date.min > now.min)
-        Challenge.find_or_create_by(player1_id: @user_id, player2_id: other_user_id, date: date)
-        challenge_created = true
-      end
-    end
+  #     now = DateTime.now
+  #     if (date.hour > now.hour) || (date.hour == now.hour && date.min > now.min)
+  #       Challenge.find_or_create_by(player1_id: @user_id, player2_id: other_user_id, date: date)
+  #       challenge_created = true
+  #     end
+  #   end
 
-    player1 = Player.find_by(username: @user_id)
-    player2 = Player.find_by(username: other_user_id)
+  #   player1 = Player.find_by(username: @user_id)
+  #   player2 = Player.find_by(username: other_user_id)
 
-    score = player1.compare(player2)
+  #   score = player1.compare(player2)
 
-    answer = "#{format_username(@user_id)} daagt #{format_username(other_user_id)} uit tot KICKERDOME"
-    answer += " op #{time}" if challenge_created
+  #   answer = "#{format_username(@user_id)} daagt #{format_username(other_user_id)} uit tot KICKERDOME"
+  #   answer += " op #{time}" if challenge_created
 
-    if score < 0.0
-      answer += Taunt::LOSER.sample % format_username(@user_id)
-    elsif score > 0.0
-      answer += Taunt::WINNER.sample % format_username(other_user_id)
-    end
+  #   if score < 0.0
+  #     answer += Taunt::LOSER.sample % format_username(@user_id)
+  #   elsif score > 0.0
+  #     answer += Taunt::WINNER.sample % format_username(other_user_id)
+  #   end
 
-    answer
-  end
+  #   answer
+  # end
 
-  def hear_challenges
-    challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
-    answer = "Uitdagingen:\n"
-    answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} à #{challenge.date.strftime("%H:%M")}" }.join("\n")
-    answer
-  end
+  # def hear_challenges
+  #   challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
+  #   answer = "Uitdagingen:\n"
+  #   answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} à #{challenge.date.strftime("%H:%M")}" }.join("\n")
+  #   answer
+  # end
 
-  def hear_stats(player)
-    player_id = extract_user_id(player)
-    player = Player.find_by(username: player_id)
+  def hear_stats(player1, player2)
+    
+    player = PairPlayer.find_by(extract_user_id(player1), extract_user_id(player2))
 
     return "Speler niet gevonden" if player.nil?
 
