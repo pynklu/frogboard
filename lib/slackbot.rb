@@ -140,7 +140,7 @@ class SlackBot
   end
 
   def hear_filtered_ranking(games_played = 3, n_weeks = 0)
-    filtered_ranking_for_scope(PairPlayer.all, games_played, n_weeks)
+    filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, n_weeks.to_i)
   end
 
   # def hear_solo_r(n_weeks = 0)
