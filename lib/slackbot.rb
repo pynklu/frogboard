@@ -135,13 +135,13 @@ class SlackBot
     ranking_for_scope(Player.player, n_weeks)
   end
 
-  def hear_team_ranking(n_weeks = 0)
-    ranking_for_scope(PairPlayer.all, n_weeks)
+  def hear_team_ranking(games_played = 0)
+    filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, 0)
   end
 
-  def hear_filtered_ranking(games_played = 3, n_weeks = 0)
-    filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, n_weeks.to_i)
-  end
+  # def hear_filtered_ranking(games_played = 3, n_weeks = 0)
+  #   filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, n_weeks.to_i)
+  # end
 
   # def hear_solo_r(n_weeks = 0)
   #   r_for_scope(Player.player, n_weeks)
@@ -228,30 +228,30 @@ class SlackBot
   #   answer
   # end
 
-  def hear_stats(player1, player2)
+  # def hear_stats(player1, player2)
     
-    player = PairPlayer.find_by(extract_user_id(player1), extract_user_id(player2))
+  #   player = PairPlayer.find_by(extract_user_id(player1), extract_user_id(player2))
 
-    return "Speler niet gevonden" if player.nil?
+  #   return "Speler niet gevonden" if player.nil?
 
-    answer = "Details voor #{format_username(player_id)} :\n"
-    answer << "Zwaarste tegenstander (% overwinningen) : "
-    answer << player.opponent_statistics.take(3).map { |opponent, score| "#{format_username(opponent)} : #{score}%" }.join(" - ")
-    answer << "\n"
-    answer << "Gemakkelijkste tegenstander (% overwinningen) : "
-    answer << player.opponent_statistics.last(3).reverse.map { |opponent, score| "#{format_username(opponent)} : #{score}%" }.join(" - ")
-    answer << "\n Globale statistieken : \n"
+  #   answer = "Details voor #{format_username(player_id)} :\n"
+  #   answer << "Zwaarste tegenstander (% overwinningen) : "
+  #   answer << player.opponent_statistics.take(3).map { |opponent, score| "#{format_username(opponent)} : #{score}%" }.join(" - ")
+  #   answer << "\n"
+  #   answer << "Gemakkelijkste tegenstander (% overwinningen) : "
+  #   answer << player.opponent_statistics.last(3).reverse.map { |opponent, score| "#{format_username(opponent)} : #{score}%" }.join(" - ")
+  #   answer << "\n Globale statistieken : \n"
 
-    percentage = lambda { |x| (100.0 * x / player.games_played.to_f).round(2) }
-    win_rate = percentage.call(player.won.to_f)
-    loss_rate = percentage.call(player.lost.to_f)
-    draw_rate = percentage.call(player.drawn.to_f)
+  #   percentage = lambda { |x| (100.0 * x / player.games_played.to_f).round(2) }
+  #   win_rate = percentage.call(player.won.to_f)
+  #   loss_rate = percentage.call(player.lost.to_f)
+  #   draw_rate = percentage.call(player.drawn.to_f)
 
-    answer << "Wins : #{win_rate}%, Losses : #{loss_rate}%, Draws : #{draw_rate}%\n"
-    largest_victory = player.largest_victory
+  #   answer << "Wins : #{win_rate}%, Losses : #{loss_rate}%, Draws : #{draw_rate}%\n"
+  #   largest_victory = player.largest_victory
 
-    answer
-  end
+  #   answer
+  # end
 
   def hear_undo
     minutes = 3
