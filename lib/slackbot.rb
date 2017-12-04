@@ -86,6 +86,31 @@ class SlackBot
     "```#{table}```"
   end
 
+  def test_ranking_for_scope(scope, n_weeks)
+    n_weeks = n_weeks.to_i
+    from = Date.today.beginning_of_week - (n_weeks - 1).week if n_weeks > 0
+
+    ranking = scope.map { |player| { :rating => player.rating(from), :player => player} }
+    ranking.sort_by! { |pr| -pr[:rating] }
+
+    members = Slack.members
+    return "Error: Couldn't fetch members list" if members.blank?
+
+    rows = []
+
+    ranking.each_with_index do |pr, index|
+      if pr[:player].games_played(from) > 3
+        name = pr[:player].member_name(members)
+
+        rows << ["#{index+1}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
+      end
+    end
+
+    table = Terminal::Table.new :title => "League Table", :headings => ["Rank", "Speler", "Gespeeld", "Won", "Lost", "Rating"], :rows => rows
+
+    "```#{table}```"
+  end
+
   def r_for_scope(scope, n_weeks)
     n_weeks = n_weeks.to_i
     from = Date.today.beginning_of_week - (n_weeks - 1).week if n_weeks > 0
@@ -112,6 +137,10 @@ class SlackBot
 
   def hear_team_ranking(n_weeks = 0)
     ranking_for_scope(PairPlayer.all, n_weeks)
+  end
+
+  def hear_test_ranking(n_weeks = 0)
+    test_ranking_for_scope(PairPlayer.all, n_weeks)
   end
 
   def hear_solo_r(n_weeks = 0)
