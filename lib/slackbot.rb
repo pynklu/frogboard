@@ -131,8 +131,8 @@ class SlackBot
 
   # all hearers
 
-  def hear_solo_ranking(n_weeks = 0)
-    ranking_for_scope(Player.player, n_weeks)
+  def hear_solo_ranking()
+    ranking_for_scope(Player.player, 0)
   end
 
   def hear_team_ranking(games_played = 0)
