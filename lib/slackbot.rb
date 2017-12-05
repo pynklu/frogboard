@@ -86,7 +86,7 @@ class SlackBot
     "```#{table}```"
   end
 
-  def filtered_ranking_for_scope(scope, games_played, n_weeks, user)
+  def filtered_ranking_for_scope(scope, games_played, n_weeks)
     n_weeks = n_weeks.to_i
     from = Date.today.beginning_of_week - (n_weeks - 1).week if n_weeks > 0
 
@@ -101,11 +101,9 @@ class SlackBot
     ranking.each_with_index do |pr, index|
       if pr[:player].games_played(from) > (games_played -1)
         name = pr[:player].member_name(members)
-        if name.include? user
-          rows << ["*#{index+1}*", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]          
-        else
-          rows << ["#{index+1}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
-        end
+
+        rows << ["#{index+1}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
+
       end
     end
 
@@ -138,14 +136,9 @@ class SlackBot
     ranking_for_scope(Player.player, 0)
   end
 
-  def hear_team_ranking(games_played = 0, user=nil)
-    if (user != nill)
-      u = extract_user_id(user)
-    else
-      u = 'randomstring'
-    end
+  def hear_team_ranking(games_played = 0)
     extract_user_id(player1)
-    filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, 0, u)
+    filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, 0)
   end
 
   # def hear_filtered_ranking(games_played = 3, n_weeks = 0)
