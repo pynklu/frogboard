@@ -97,12 +97,13 @@ class SlackBot
     return "Error: Couldn't fetch members list" if members.blank?
 
     rows = []
-
+    i = 1
     ranking.each_with_index do |pr, index|
       if pr[:player].games_played(from) > (games_played -1)
         name = pr[:player].member_name(members)
 
-        rows << ["#{index+1}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
+        rows << ["#{i}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
+        i = i+1
       end
     end
 
