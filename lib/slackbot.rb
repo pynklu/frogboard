@@ -103,7 +103,6 @@ class SlackBot
         name = pr[:player].member_name(members)
 
         rows << ["#{index+1}", name, "#{pr[:player].games_played(from)}", "#{pr[:player].won(from)}", "#{pr[:player].lost(from)}", "#{pr[:rating].to_i}"]
-
       end
     end
 
@@ -137,7 +136,6 @@ class SlackBot
   end
 
   def hear_team_ranking(games_played = 0)
-    extract_user_id(player1)
     filtered_ranking_for_scope(PairPlayer.all, games_played.to_i, 0)
   end
 
