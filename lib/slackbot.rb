@@ -87,6 +87,10 @@ class SlackBot
   end
 
   def filtered_ranking_for_scope(scope, games_played, n_weeks)
+    if games_played < 2
+      r_for_scope(PairPlayer.all, n_weeks)
+      return
+    end
     n_weeks = n_weeks.to_i
     from = Date.today.beginning_of_week - (n_weeks - 1).week if n_weeks > 0
 
@@ -195,13 +199,13 @@ class SlackBot
     game = create_game_with_players(_player1, _player2, _team1, _team2, score1, score2)
 
     answer = "Match (#{player1}, #{score1}) - (#{player2}, #{score2}) toegevoegd"
-
+    pr[:player].member_name(members)
     if game.drawn?
       answer += Taunt::MATCH_DRAWN.sample
     elsif [0, 1].sample == 0
-      answer += Taunt::MATCH_WINNER.sample % format_username(game.winner.player.username)
+      answer += Taunt::MATCH_WINNER.sample % game.winner.player.member_name(Slack.members)
     else
-      answer += Taunt::MATCH_LOSER.sample % format_username(game.loser.player.username)
+      answer += Taunt::MATCH_LOSER.sample % game.loser.member_name(Slack.members)
     end
 
     return answer
