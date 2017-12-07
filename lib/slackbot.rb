@@ -163,7 +163,17 @@ class SlackBot
 
     create_game_with_players(_player1, _player2, _team1, _team2, score1, score2)
 
-    "Match (#{winner1}, #{winner2}, #{score1}) - (#{loser1}, #{loser2}, #{score2}) Toegevoegd"
+    answer = "Match (#{winner1}, #{winner2}, #{score1}) - (#{loser1}, #{loser2}, #{score2}) Toegevoegd"
+
+    if game.drawn?
+      answer += Taunt::MATCH_DRAWN.sample
+    elsif [0, 1].sample == 0
+      answer += Taunt::MATCH_WINNER.sample % winner1 & " en " & winner2
+    else
+      answer += Taunt::MATCH_LOSER.sample % loser1 & " en " & loser2
+    end
+
+    return answer
   end
 
   def hear_1v1(player1, score1, player2, score2)
