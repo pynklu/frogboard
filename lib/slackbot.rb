@@ -162,8 +162,24 @@ class SlackBot
     return "Team #{team2} niet gekend" if _team2.nil?
 
     create_game_with_players(_player1, _player2, _team1, _team2, score1, score2)
+  
+    begin
+      answer = "Match (#{player1}, #{score1}) - (#{player2}, #{score2}) toegevoegd"
+      winstring = "#{player1}"
+      losestring = "#{player2}"
 
-    return  "Match (#{winner1}, #{winner2}, #{score1}) - (#{loser1}, #{loser2}, #{score2}) Toegevoegd"
+      if game.drawn?
+        answer += Taunt::MATCH_DRAWN.sample
+      elsif [0, 1].sample == 0
+        answer += Taunt::MATCH_WINNER.sample % winstring
+      else
+        answer += Taunt::MATCH_LOSER.sample % losestring
+      end
+      return answer
+    rescue Exception => e
+      return  "Match (#{winner1}, #{winner2}, #{score1}) - (#{loser1}, #{loser2}, #{score2}) Toegevoegd"
+    end
+    
 
   end
 

@@ -12,7 +12,7 @@ module Taunt
 
   MATCH_WINNER = [
     ", bim bam boum, ça c'est fait",
-    ", %s : beast of the day",
+    ", %s : doldriest",
     ", wie stopt %s ?",
     ", easy",
     ", gg",
@@ -20,7 +20,7 @@ module Taunt
 
   MATCH_LOSER = [
     ", volgende keer beter, %s",
-    ", %s moet nog wat vragenlijsten gaan maken",
+    ", slechte eindejaarsevaluatie voor %s",
     ", totale vernedering voor %s",
   ]
 
