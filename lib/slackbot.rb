@@ -168,9 +168,9 @@ class SlackBot
     if game.drawn?
       answer += Taunt::MATCH_DRAWN.sample
     elsif [0, 1].sample == 0
-      answer += Taunt::MATCH_WINNER.sample % winner1 & " en " & winner2
+      answer += Taunt::MATCH_WINNER.sample % ""+winner1 + " en " + winner2
     else
-      answer += Taunt::MATCH_LOSER.sample % loser1 & " en " & loser2
+      answer += Taunt::MATCH_LOSER.sample % ""+loser1 + " en " + loser2
     end
 
     return answer
