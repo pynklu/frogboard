@@ -88,8 +88,7 @@ class SlackBot
 
   def filtered_ranking_for_scope(scope, games_played, n_weeks)
     if games_played < 2
-      r_for_scope(PairPlayer.all, n_weeks)
-      return
+      return r_for_scope(PairPlayer.all, n_weeks)
     end
     n_weeks = n_weeks.to_i
     from = Date.today.beginning_of_week - (n_weeks - 1).week if n_weeks > 0
