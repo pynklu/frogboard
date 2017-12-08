@@ -242,6 +242,32 @@ class SlackBot
     answer
   end
 
+  def hear_challenge_2v2(teammate, opponent1, opponent2, time = "")
+    mate_user_id = extract_user_id(teammate)
+    opp1_user_id = extract_user_id(opponent1)
+    opp2_user_id = extract_user_id(opponent2)
+    challenge_created = false
+    t1 = "" + @user_id + " & " + mate_user_id
+    t2 = "" + opp1_user_id + " & " + opp2_user_id
+    
+    if time.length > 0
+      date = DateTime.parse(time) rescue nil
+      return "Moi personnellement, j'ai pas compris l'heure moi tout seul" if date.nil?
+
+      now = DateTime.now
+      if (date.hour > now.hour) || (date.hour == now.hour && date.min > now.min)
+        Challenge.find_or_create_by(player1_id: t1, player2_id: t2, date: date)
+        challenge_created = true
+      end
+    end
+
+    answer = "#{format_username(@user_id)} & #{format_username(mate_user_id)} dagen #{format_username(opp1_user_id)} & #{format_username(opp2_user_id)} uit"
+    answer += " om #{time}" if challenge_created
+
+
+    answer
+  end
+
   def hear_challenges
     challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
     answer = "Uitdagingen:\n"
