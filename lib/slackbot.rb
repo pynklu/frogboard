@@ -210,44 +210,44 @@ class SlackBot
     return answer
   end
   
-  # def hear_challenge(player, time = "")
-  #   other_user_id = extract_user_id(player)
-  #   challenge_created = false
+  def hear_challenge(player, time = "")
+    other_user_id = extract_user_id(player)
+    challenge_created = false
 
-  #   if time.length > 0
-  #     date = DateTime.parse(time) rescue nil
-  #     return "Moi personnellement, j'ai pas compris l'heure moi tout seul" if date.nil?
+    if time.length > 0
+      date = DateTime.parse(time) rescue nil
+      return "Moi personnellement, j'ai pas compris l'heure moi tout seul" if date.nil?
 
-  #     now = DateTime.now
-  #     if (date.hour > now.hour) || (date.hour == now.hour && date.min > now.min)
-  #       Challenge.find_or_create_by(player1_id: @user_id, player2_id: other_user_id, date: date)
-  #       challenge_created = true
-  #     end
-  #   end
+      now = DateTime.now
+      if (date.hour > now.hour) || (date.hour == now.hour && date.min > now.min)
+        Challenge.find_or_create_by(player1_id: @user_id, player2_id: other_user_id, date: date)
+        challenge_created = true
+      end
+    end
 
-  #   player1 = Player.find_by(username: @user_id)
-  #   player2 = Player.find_by(username: other_user_id)
+    player1 = Player.find_by(username: @user_id)
+    player2 = Player.find_by(username: other_user_id)
 
-  #   score = player1.compare(player2)
+    score = player1.compare(player2)
 
-  #   answer = "#{format_username(@user_id)} daagt #{format_username(other_user_id)} uit tot KICKERDOME"
-  #   answer += " op #{time}" if challenge_created
+    answer = "#{format_username(@user_id)} daagt #{format_username(other_user_id)} uit "
+    answer += " op #{time}" if challenge_created
 
-  #   if score < 0.0
-  #     answer += Taunt::LOSER.sample % format_username(@user_id)
-  #   elsif score > 0.0
-  #     answer += Taunt::WINNER.sample % format_username(other_user_id)
-  #   end
+    if score < 0.0
+      answer += Taunt::LOSER.sample % format_username(@user_id)
+    elsif score > 0.0
+      answer += Taunt::WINNER.sample % format_username(other_user_id)
+    end
 
-  #   answer
-  # end
+    answer
+  end
 
-  # def hear_challenges
-  #   challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
-  #   answer = "Uitdagingen:\n"
-  #   answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} à #{challenge.date.strftime("%H:%M")}" }.join("\n")
-  #   answer
-  # end
+  def hear_challenges
+    challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
+    answer = "Uitdagingen:\n"
+    answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} à #{challenge.date.strftime("%H:%M")}" }.join("\n")
+    answer
+  end
 
   # def hear_stats(player1, player2)
     
