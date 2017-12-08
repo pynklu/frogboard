@@ -271,7 +271,7 @@ class SlackBot
   def hear_challenges
     challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
     answer = "Uitdagingen:\n"
-    answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} (#{challenge.date.strftime("%H:%M")})" }.join("\n")
+    answer += challenges.map { |challenge| "#{challenge.player1_id} vs #{challenge.player2_id} (#{challenge.date.strftime("%H:%M")})" }.join("\n")
     answer
   end
 
