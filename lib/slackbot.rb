@@ -230,8 +230,8 @@ class SlackBot
 
     score = player1.compare(player2)
 
-    answer = "#{format_username(@user_id)} daagt #{format_username(other_user_id)} uit "
-    answer += " op #{time}" if challenge_created
+    answer = "#{format_username(@user_id)} daagt #{format_username(other_user_id)} uit"
+    answer += " om #{time}" if challenge_created
 
     if score < 0.0
       answer += Taunt::LOSER.sample % format_username(@user_id)
@@ -245,7 +245,7 @@ class SlackBot
   def hear_challenges
     challenges = Challenge.where("date >= ?", DateTime.now).order(:date)
     answer = "Uitdagingen:\n"
-    answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} à #{challenge.date.strftime("%H:%M")}" }.join("\n")
+    answer += challenges.map { |challenge| "#{format_username(challenge.player1_id)} vs #{format_username(challenge.player2_id)} (#{challenge.date.strftime("%H:%M")})" }.join("\n")
     answer
   end
 
