@@ -220,7 +220,7 @@ class SlackBot
 
       now = DateTime.now
       if (date.hour > now.hour) || (date.hour == now.hour && date.min > now.min)
-        Challenge.find_or_create_by(player1_id: @user_id, player2_id: other_user_id, date: date)
+        Challenge.find_or_create_by(player1_id: format_username(@user_id), player2_id: format_username(other_user_id), date: date)
         challenge_created = true
       end
     end
@@ -247,8 +247,8 @@ class SlackBot
     opp1_user_id = extract_user_id(opponent1)
     opp2_user_id = extract_user_id(opponent2)
     challenge_created = false
-    t1 = "" + @user_id + " & " + mate_user_id
-    t2 = "" + opp1_user_id + " & " + opp2_user_id
+    t1 = "" + format_username(@user_id) + " & " + format_username(mate_user_id)
+    t2 = "" + format_username(opp1_user_id) + " & " + format_username(opp2_user_id)
     
     if time.length > 0
       date = DateTime.parse(time) rescue nil
