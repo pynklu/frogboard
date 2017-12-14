@@ -16,7 +16,6 @@ class SlackBot
   end
 
   def answer
-    return params if @slack_token != ENV["SLACK_WEBHOOK_TOKEN"]
     return "Bien tenté Jean-Mi" if @slack_token != ENV["SLACK_WEBHOOK_TOKEN"]
 
     data = @text.split
@@ -197,17 +196,19 @@ class SlackBot
 
     game = create_game_with_players(_player1, _player2, _team1, _team2, score1, score2)
 
-    answer = "Match (#{player1}, #{score1}) - (#{player2}, #{score2}) toegevoegd"
-    pr[:player].member_name(members)
-    if game.drawn?
-      answer += Taunt::MATCH_DRAWN.sample
-    elsif [0, 1].sample == 0
-      answer += Taunt::MATCH_WINNER.sample % game.winner.player.member_name(Slack.members)
-    else
-      answer += Taunt::MATCH_LOSER.sample % game.loser.member_name(Slack.members)
+    begin
+      answer = "Match (#{player1}, #{score1}) - (#{player2}, #{score2}) toegevoegd"
+      if game.drawn?
+        answer += Taunt::MATCH_DRAWN.sample
+      elsif [0, 1].sample == 0
+        answer += Taunt::MATCH_WINNER.sample % game.winner.player.member_name(Slack.members)
+      else
+        answer += Taunt::MATCH_LOSER.sample % game.loser.player.member_name(Slack.members)
+      end
+      return answer
+    rescue Exception => e
+      return "Match (#{player1}, #{score1}) - (#{player2}, #{score2}) toegevoegd"
     end
-
-    return answer
   end
   
   def hear_challenge(player, time = "")
