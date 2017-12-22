@@ -126,7 +126,7 @@ class SlackBot
 
     rows = ranking.map.with_index do |pr, index|
       name = pr[:player].member_name(members)
-      "#{index+1}. #{name} (#{pr[:rating].to_i})"
+      "[#{index+1}] #{name} #{pr[:player].won(from)}-#{pr[:player].lost(from)} (#{pr[:rating].to_i})"
     end
 
     rows.join("\n")
