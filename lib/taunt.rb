@@ -14,14 +14,19 @@ module Taunt
     ", bim bam boum, ça c'est fait",
     ", %s : doldriest",
     ", wie stopt %s ?",
-    ", easy",
-    ", gg",
+    ", %s : baldadig",
+    ". %s officieel benoemd tot kantoorheld van de dag.",
+    ". Zouden emoticons werken? :frog: :poop: :frog:"
   ]
 
   MATCH_LOSER = [
     ", volgende keer beter, %s",
     ", slechte eindejaarsevaluatie voor %s",
     ", totale vernedering voor %s",
+    ". Zal %s dit ooit te boven komen?",
+    ". Rust in vrede, %s",
+    ". Zouden emoticons werken? :frog: :poop: :frog:",
+    ", quelle horreur, %s ..",
   ]
 
   MATCH_DRAWN = [
