@@ -16,17 +16,18 @@ module Taunt
     ", wie stopt %s ?",
     ", %s : baldadig",
     ". %s officieel benoemd tot kantoorheld van de dag.",
-    ". Zouden emoticons werken? :frog: :poop: :frog:"
+    ". :hammer_time: %s :hammer_time:",
+    ". :worship: %s"
   ]
 
   MATCH_LOSER = [
-    ", volgende keer beter, %s",
-    ", slechte eindejaarsevaluatie voor %s",
-    ", totale vernedering voor %s",
+    ". Volgende keer beter, %s",
+    ". Slechte eindejaarsevaluatie voor %s",
+    ". Totale vernedering voor %s",
     ". Zal %s dit ooit te boven komen?",
     ". Rust in vrede, %s",
-    ". Zouden emoticons werken? :frog: :poop: :frog:",
-    ", quelle horreur, %s ..",
+    ". :kaboom: %s :kaboom:",
+    ". quelle horreur, %s ..",
   ]
 
   MATCH_DRAWN = [
